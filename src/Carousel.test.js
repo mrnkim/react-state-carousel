@@ -29,3 +29,4 @@ it("works when you click on the right arrow", function() {
     container.querySelector('img[alt="testing image 2"]')
   ).toBeInTheDocument();
 });
+
