@@ -26,13 +26,13 @@ it("works when you click on the right arrow", function () {
     container.querySelector('img[alt="testing image 2"]')
   ).toBeInTheDocument();
 });
-
-//smoke test
+//TODO: smoke test and snap test to be on top
+/****** smoke test ***********************************************************/
 it("renders without crashing", function () {
   render(<Carousel photos={TEST_IMAGES} title="images for testing" />);
 });
 
-//snapshot test
+/****** snapshot test ********************************************************/
 it("matches snapshot", function () {
   const { container } = render(
     <Carousel photos={TEST_IMAGES} title="images for testing" />
@@ -40,6 +40,7 @@ it("matches snapshot", function () {
   expect(container).toMatchSnapshot();
 });
 
+/****** left arrow test ******************************************************/
 it("works when you click on the left arrow", function () {
   const { container } = render(
     <Carousel photos={TEST_IMAGES} title="images for testing" />
@@ -48,6 +49,7 @@ it("works when you click on the left arrow", function () {
   //move to the second image
   const rightArrow = container.querySelector(".bi-arrow-right-circle");
   fireEvent.click(rightArrow);
+  //TODO: confirm to see the second image, not first image
 
   //move back to the first image
   const leftArrow = container.querySelector(".bi-arrow-left-circle");
@@ -58,6 +60,34 @@ it("works when you click on the left arrow", function () {
     container.querySelector('img[alt="testing image 1"]')
   ).toBeInTheDocument();
   expect(
-    container.querySelector('img[alt="testing image 3"]')
+    container.querySelector('img[alt="testing image 2"]')
+  ).not.toBeInTheDocument();
+});
+
+/****** left and right arrow at the first and last image test ****************/
+it("hides left arrow at the first image", function () {
+  const { container } = render(
+    <Carousel photos={TEST_IMAGES} title="images for testing" />
+  );
+
+  expect(
+    container.querySelector(".bi-arrow-left-circle")
+  ).not.toBeInTheDocument();
+});
+
+it("hides right arrow at the third image", function () {
+  const { container } = render(
+    <Carousel photos={TEST_IMAGES} title="images for testing" />
+  );
+
+  // move forward in the carousel
+  const rightArrow = container.querySelector(".bi-arrow-right-circle");
+
+  // move to the third image
+  fireEvent.click(rightArrow);
+  fireEvent.click(rightArrow);
+
+  expect(
+    container.querySelector(".bi-arrow-right-circle")
   ).not.toBeInTheDocument();
 });
