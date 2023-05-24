@@ -29,25 +29,27 @@ function Carousel({ photos, title }) {
     setCurrCardIdx(currCardIdx - 1);
   }
 
-  //TODO: write css class hidden, make the last image index dynamic
+  const hideShowLeft = currCardIdx === 0 ? "hidden" : "";
+  const hideShowRight = currCardIdx === total - 1 ? "hidden" : "";
+
   return (
     <div className="Carousel">
       <h1>{title}</h1>
       <div className="Carousel-main">
-        {currCardIdx !== 0 && (
-          <i className="bi bi-arrow-left-circle" onClick={goBackward} />
-        )}
-
+        <i
+          className={`bi bi-arrow-left-circle ${hideShowLeft}`}
+          onClick={goBackward}
+        />
         <Card
           caption={currCard.caption}
           src={currCard.src}
           currNum={currCardIdx + 1}
           totalNum={total}
         />
-
-        {currCardIdx !== 2 && (
-          <i className="bi bi-arrow-right-circle" onClick={goForward} />
-        )}
+        <i
+          className={`bi bi-arrow-right-circle ${hideShowRight}`}
+          onClick={goForward}
+        />
       </div>
     </div>
   );

@@ -2,6 +2,20 @@ import { render, fireEvent } from "@testing-library/react";
 import Carousel from "./Carousel";
 import TEST_IMAGES from "./_testCommon.js";
 
+/****** smoke test ***********************************************************/
+it("renders without crashing", function () {
+  render(<Carousel photos={TEST_IMAGES} title="images for testing" />);
+});
+
+/****** snapshot test ********************************************************/
+it("matches snapshot", function () {
+  const { container } = render(
+    <Carousel photos={TEST_IMAGES} title="images for testing" />
+  );
+  expect(container).toMatchSnapshot();
+});
+
+/****** right arrow test ******************************************************/
 it("works when you click on the right arrow", function () {
   const { container } = render(
     <Carousel photos={TEST_IMAGES} title="images for testing" />
@@ -26,19 +40,6 @@ it("works when you click on the right arrow", function () {
     container.querySelector('img[alt="testing image 2"]')
   ).toBeInTheDocument();
 });
-//TODO: smoke test and snap test to be on top
-/****** smoke test ***********************************************************/
-it("renders without crashing", function () {
-  render(<Carousel photos={TEST_IMAGES} title="images for testing" />);
-});
-
-/****** snapshot test ********************************************************/
-it("matches snapshot", function () {
-  const { container } = render(
-    <Carousel photos={TEST_IMAGES} title="images for testing" />
-  );
-  expect(container).toMatchSnapshot();
-});
 
 /****** left arrow test ******************************************************/
 it("works when you click on the left arrow", function () {
@@ -49,7 +50,12 @@ it("works when you click on the left arrow", function () {
   //move to the second image
   const rightArrow = container.querySelector(".bi-arrow-right-circle");
   fireEvent.click(rightArrow);
-  //TODO: confirm to see the second image, not first image
+  expect(
+    container.querySelector('img[alt="testing image 2"]')
+  ).toBeInTheDocument();
+  expect(
+    container.querySelector('img[alt="testing image 1"]')
+  ).not.toBeInTheDocument();
 
   //move back to the first image
   const leftArrow = container.querySelector(".bi-arrow-left-circle");
@@ -70,9 +76,9 @@ it("hides left arrow at the first image", function () {
     <Carousel photos={TEST_IMAGES} title="images for testing" />
   );
 
-  expect(
-    container.querySelector(".bi-arrow-left-circle")
-  ).not.toBeInTheDocument();
+  expect(container.querySelector(".bi-arrow-left-circle")).toHaveClass(
+    "hidden"
+  );
 });
 
 it("hides right arrow at the third image", function () {
@@ -87,7 +93,7 @@ it("hides right arrow at the third image", function () {
   fireEvent.click(rightArrow);
   fireEvent.click(rightArrow);
 
-  expect(
-    container.querySelector(".bi-arrow-right-circle")
-  ).not.toBeInTheDocument();
+  expect(container.querySelector(".bi-arrow-right-circle")).toHaveClass(
+    "hidden"
+  );
 });
